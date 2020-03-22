@@ -6,3 +6,6 @@ Feel free to let me know in the comments if I missed one.
 
 
 ![Image Covid19_it_Perc](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Perc.png)
+
+
+![Image Covid19_it_Cum](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_cum.png)
