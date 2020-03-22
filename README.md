@@ -1,1 +1,3 @@
-# Stat_Covid19-.gitignore
+# Stat_Covid19
+
+# Coronavirus Trackers in Italy
