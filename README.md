@@ -35,6 +35,6 @@ updated every day
 
 ![Image Covid19_it_Cum](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_cum.png)
 
-![Image Covid19_it_swabs](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_tamponi.png)
+![Image Covid19_it_Lombardia](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Lombardia.png)
 
 
