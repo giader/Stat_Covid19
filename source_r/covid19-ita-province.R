@@ -16,17 +16,15 @@ result_nazione <- fromJSON("dpc-covid19-ita-andamento-nazionale.json", flatten=T
 # str(result)
 
 # Convert JSON file to a data frame.
-# covid19_it0 <- as.data.frame(results)
-# covid19_it <- do.call(rbind, lapply(results, data.frame))
 covid19_it <- result_regioni
 covid19_it_sum <- result_nazione
 str(covid19_it)
 #dim(covid19_it)
 str(covid19_it_sum)
 
-# preparazione data frame 
-# converto data e denominazione_regione
-# elimino le colonne -lat- e -long-
+# starting data frame 
+# convert -data- & -denominazione_regione- columns
+# delete -lat- & -long- columns
 covid19_it     <- as_tibble(covid19_it)
 covid19_it_sum <- as_tibble(covid19_it_sum)
 class(covid19_it)
@@ -34,16 +32,15 @@ covid19_it$denominazione_regione<-as.factor(covid19_it$denominazione_regione)
 covid19_it <- covid19_it %>% select(everything(), -lat, -long)
 
 names(covid19_it_sum)
-
-
+# new Growth rate columns
 covid19_it_sum$Perc_nuovi_attualmente_positivi <- (covid19_it_sum$nuovi_attualmente_positivi / 
                                                      lag(covid19_it_sum$nuovi_attualmente_positivi, k=1)-1)
-
+# Growth rate function
 Perc_covid19 <- function(x, n) {
   y <- 100*(x / lag(x, k=n)-1)
 }
 
-ts_n = 1
+ts_n = 1 ### Lag
 covid19_it_sum$Perc_nuovi_attualmente_positivi = Perc_covid19(covid19_it_sum$nuovi_attualmente_positivi, ts_n)
 covid19_it_sum$Perc_totale_ospedalizzati = Perc_covid19(covid19_it_sum$totale_ospedalizzati, ts_n)
 covid19_it_sum$Perc_tot_attualmente_positivi = Perc_covid19(covid19_it_sum$totale_attualmente_positivi, ts_n)
@@ -55,32 +52,15 @@ covid19_it_col <- c(names(covid19_it_sum[-(1:2)]) )  # elimino le prime due colo
 covid19_it_col[5]
 class(covid19_it_col)
 
-# for(i in covid19_it_col(i)) {
-#   covid19_it_sum$ <- Perc_covid19(covid19_it_sum$covid19_it_col[n], 1)
-# }
-
-
-
-# Filtro per totali
-#Tcovid19_it <- filter(Tcovid19_it, denominazione_regione!= "")   ## select molto rapida
-##covid19_it_wip <- covid19_it[covid19_it$sigla_provincia != "", ]
-# covid19_it %>%
-#   filter(covid19_it, sigla_provincia!= "") %>%
-#   select(everything(), -stato, -codice_regione, -codice_provincia, -lat, -long) %>%
-#   group_by(sigla_provincia) %>%
-#   summarise(totale_casi)  ## somma all'interno di un group by
-
 ###############################################################################################################
 require(RSQLite)
+# con  connection
 ## con <- dbConnect(RSQLite::SQLite(), ":memory:")
 con <- dbConnect(RSQLite::SQLite(), 'covid19it.sqlite')
 dbListTables(con)
 dbWriteTable(conn = con, name = "tbl_covid19it", value = covid19_it)
-
 con_dplyr <- src_sqlite('covid19it.sqlite')
-
 tbl_covid19it <- tbl(con_dplyr, "tbl_covid19it")
-
 tbl_covid19it %>%
   group_by(data, codice_regione, denominazione_regione) %>%
   summarise(totale_casi) %>%
@@ -92,37 +72,19 @@ Tot.covid19it <-
   summarise(ricoverati_con_sintomi, terapia_intensiva, isolamento_domiciliare, totale_attualmente_positivi, dimessi_guariti,
             deceduti, totale_casi) %>%
   collect()
-
-# tbl_Tcovid19it_SumD <-
-#   tbl_Tcovid19it%>%
-#   group_by(data, codice_regione, denominazione_regione) %>%
-#   summarise(ricoverati_con_sintomi, terapia_intensiva, isolamento_domiciliare, totale_attualmente_positivi, dimessi_guariti,
-#             deceduti, totale_casi) %>%
-#   collect()
-
-# con disconnessione
+# con disconnection
 dbDisconnect(conn=con)
-
-#tbl_Tcovid19it_SumD$data <- as.Date(tbl_Tcovid19it_SumD$data) ###, "%d-%b-%Y")
 ###############################################################################################################
 
-covid19_it$data     <- as.Date(covid19_it$data) ###, "%d-%b-%Y")
+covid19_it$data     <- as.Date(covid19_it$data) 
 covid19_it_sum$data <- as.Date(covid19_it_sum$data)
 
 str(covid19_it); str(covid19_it_sum)
 names(covid19_it_sum)
-
-
 # regions <- c("Abruzzo", "Marche", "Lombardia", "Veneto", "Emilia Romagna", "Toscana")
-
 covid19_it_regions <- covid19_it %>%
   filter(codice_regione == 3 | codice_regione == 5 | codice_regione == 8 | codice_regione == 9 | codice_regione == 13 ) %>%
   select(everything())  
-
-# covid19_it_regions <- covid19_it %>%
-#   filter(codice_regione <10) %>%
-#   select(everything())  
-
 
 library(ggplot2)
 covid19_it_regions %>% bind_rows(covid19_it_regions %>% 
@@ -134,14 +96,6 @@ covid19_it_regions %>% bind_rows(covid19_it_regions %>%
   labs(y = "Cumulative Daily total Covid-19 cases", title = "Comparison of Italian Regions", 
        subtitle = "(Note: not all regions shown here)", caption = "Sources: https://github.com/pcm-dpc/COVID-19") + 
   theme(legend.position = "top", legend.title = element_blank())
-
-# 
-# covid19_it_sum %>% bind_rows(covid19_it_sum) %>% 
-#   ggplot(aes(x = data, y = totale_casi)) + 
-#   geom_line() + geom_point() + facet_grid(stato ~ ., scale = "free_y") + 
-#   labs(y = "Cumulative Daily total Covid-19 cases", title = "Covid19 in Italy", 
-#        subtitle = "(Note: total units)", caption = "Sources: https://github.com/pcm-dpc/COVID-19") + 
-#   theme(legend.position = "top", legend.title = element_blank())
 
 ## Logaritmic scale
 covid19_it_sum %>%
@@ -190,9 +144,10 @@ covid19_it_sum %>%
   bestfit
 
 par(mfrow=c(1,1))
-
+###   TS analysis test
+#FastFourierTrasform Periodogram 
 require(TSA)
-periodogram(covid19_it_sum$totale_casi)   #FastFourierTrasform Periodogram 
+periodogram(covid19_it_sum$totale_casi)   
 p<-periodogram(covid19_it_sum$totale_casi)
 
 
@@ -213,7 +168,7 @@ time
 
 library(forecast)
 
-#Esempio funzione ts package {stats}
+# ts package {stats}
 tsCovid19_it = ts(rev(covid19_it_sum$totale_casi),start=c(2020, 2),end=c(2020,3),frequency=mean(top2[,1]))
 Acf(tsCovid19_it)
 Pacf(tsCovid19_it)
