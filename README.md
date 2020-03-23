@@ -13,8 +13,8 @@ Feel free to let me know in the comments if I missed one.
 3. a new dataset will be released to give informations on data
 ```
 
-## Wiki 
-[Wiki](https://github.com/pcm-dpc/COVID-19/wiki)<br>
+## Source 
+[Wiki](https://github.com/pcm-dpc/COVID-19)<br>
 
 ## Graphs 
 ![Image Covid19_it_Perc](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Perc.png)
