@@ -14,7 +14,7 @@ Feel free to let me know in the comments if I missed one.
 ```
 
 ## Source 
-[Wiki](https://github.com/pcm-dpc/COVID-19)<br>
+[source](https://github.com/pcm-dpc/COVID-19)<br>
 
 ## Graphs 
 ![Image Covid19_it_Perc](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Perc.png)
