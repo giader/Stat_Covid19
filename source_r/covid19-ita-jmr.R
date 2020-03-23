@@ -1,0 +1,193 @@
+## read Json file 
+setwd("C:/Users/Gianni/Dropbox/R_JSON")
+load("./R_json.RData")
+save.image("./R_json.RData") 
+# Load the package required to read JSON files.
+library(rjson)
+library(dplyr)
+library(jsonlite)
+# Give the input file name to the function.
+result_regioni <- fromJSON("./Data/dpc-covid19-ita-regioni.json", flatten=TRUE)
+result_nazione <- fromJSON("./Data/dpc-covid19-ita-andamento-nazionale.json", flatten=TRUE)
+# Print the result.
+# head(result)
+# head(results)
+# str(result)
+
+# Convert JSON file to a data frame.
+covid19_it <- result_regioni
+covid19_it_sum <- result_nazione
+str(covid19_it)
+#dim(covid19_it)
+str(covid19_it_sum)
+
+# data frame building
+# convert -data- & -denominazione_regione- columns
+# delete -lat- & -long- columns
+covid19_it     <- as_tibble(covid19_it)
+covid19_it_sum <- as_tibble(covid19_it_sum)
+class(covid19_it)
+covid19_it$denominazione_regione<-as.factor(covid19_it$denominazione_regione)
+covid19_it <- covid19_it %>% select(everything(), -lat, -long)
+
+names(covid19_it_sum)
+# new Growth rate columns
+covid19_it_sum$Perc_nuovi_attualmente_positivi <- (covid19_it_sum$nuovi_attualmente_positivi / 
+                                                     lag(covid19_it_sum$nuovi_attualmente_positivi, k=1)-1)
+
+# Growth rate function
+Perc_covid19 <- function(x, n) {
+  y <- 100*(x / lag(x, k=n)-1)
+}
+
+ts_n = 1  ### Lag
+covid19_it_sum$Perc_nuovi_attualmente_positivi = Perc_covid19(covid19_it_sum$nuovi_attualmente_positivi, 1)
+covid19_it_sum$Perc_totale_ospedalizzati = Perc_covid19(covid19_it_sum$totale_ospedalizzati, ts_n)
+covid19_it_sum$Perc_tot_attualmente_positivi = Perc_covid19(covid19_it_sum$totale_attualmente_positivi, ts_n)
+covid19_it_sum$Perc_terapia_intensiva = Perc_covid19(covid19_it_sum$terapia_intensiva, ts_n)
+covid19_it_sum$Perc_deceduti = Perc_covid19(covid19_it_sum$deceduti, ts_n)
+covid19_it_sum$Perc_tot_casi = Perc_covid19(covid19_it_sum$totale_casi, ts_n)
+
+covid19_it_col <- c(names(covid19_it_sum[-(1:2)]) )  # elimino le prime due colonne
+covid19_it_col[5]
+class(covid19_it_col)
+
+###############################################################################################################
+require(RSQLite)
+# con  connection
+## con <- dbConnect(RSQLite::SQLite(), ":memory:")
+con <- dbConnect(RSQLite::SQLite(), 'covid19it.sqlite')
+dbListTables(con)
+dbWriteTable(conn = con, name = "tbl_covid19it", value = covid19_it)
+
+con_dplyr <- src_sqlite('covid19it.sqlite')
+
+tbl_covid19it <- tbl(con_dplyr, "tbl_covid19it")
+
+tbl_covid19it %>%
+  group_by(data, codice_regione, denominazione_regione) %>%
+  summarise(totale_casi) %>%
+  show_query()
+
+Tot.covid19it <-
+  tbl_covid19it %>%
+  group_by(data) %>%
+  summarise(ricoverati_con_sintomi, terapia_intensiva, isolamento_domiciliare, totale_attualmente_positivi, dimessi_guariti,
+            deceduti, totale_casi) %>%
+  collect()
+
+# con disconnessione
+dbDisconnect(conn=con)
+###############################################################################################################
+
+covid19_it$data     <- as.Date(covid19_it$data) 
+covid19_it_sum$data <- as.Date(covid19_it_sum$data)
+
+str(covid19_it); str(covid19_it_sum)
+names(covid19_it_sum)
+
+# regions <- c("Abruzzo", "Marche", "Lombardia", "Veneto", "Emilia Romagna", "Toscana")
+covid19_it_regions <- covid19_it %>%
+  filter(codice_regione == 3 | codice_regione == 5 | codice_regione == 8 | codice_regione == 9 | codice_regione == 13 ) %>%
+  select(everything())  
+
+library(ggplot2)
+covid19_it_regions %>% bind_rows(covid19_it_regions %>% 
+                           group_by(data, denominazione_regione) %>% 
+                           summarise(totale_casi, deceduti)) %>% 
+  ##                         mutate(province = "Sum all provinces")) %>% 
+  ggplot(aes(x = data, y = totale_casi, colour = denominazione_regione)) + 
+  geom_line() + geom_point() + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
+  labs(y = "Cumulative Daily total Covid-19 cases", title = "Comparison of Italian Regions", 
+       subtitle = "(Note: not all regions shown here)", caption = "Sources: https://github.com/pcm-dpc/COVID-19") + 
+  theme(legend.position = "top", legend.title = element_blank())
+
+## Logaritmic scale
+covid19_it_sum %>%
+  gather(key,value,nuovi_attualmente_positivi, totale_attualmente_positivi, totale_casi, deceduti, tamponi ) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 2) + 
+  scale_y_continuous(trans='log')+
+  labs(y = "Cumulative Daily total Covid-19 cases logaritm scale ", title = "Covid19 in Italy", 
+       subtitle = "(Note: total units in log scale)", caption = "gdr >>> Sources: https://github.com/pcm-dpc/COVID-19") 
+
+## Standard scale
+
+# save plot image
+png("./images/Covid19_it_cum.png", 500,500)
+covid19_it_sum %>%
+  gather(key,value,nuovi_attualmente_positivi, totale_attualmente_positivi, totale_casi, deceduti, tamponi ) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 2) + 
+  labs(y = "Cumulative Daily total Covid-19 cases", title = "Covid19 in Italy", 
+       subtitle = "(Note: total units)", caption = "gdr >>> Sources: https://github.com/pcm-dpc/COVID-19") 
+dev.off()
+
+png("./images/Covid19_it_Perc.png", 500,500)
+covid19_it_sum %>%
+  gather(key,value,Perc_nuovi_attualmente_positivi, Perc_tot_attualmente_positivi, Perc_tot_casi, ) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 2) +
+  labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 in Italy", 
+       caption = "gdr >>>  Sources: https://github.com/pcm-dpc/COVID-19")
+dev.off()
+
+bestfit <- geom_smooth(
+  method = "lm", 
+  se = FALSE, 
+  colour = alpha("steelblue", 0.5), 
+  size = 2
+)
+covid19_it_sum %>% bind_rows(covid19_it_sum) %>% 
+  ggplot(aes(x = data, y = totale_casi)) + 
+  geom_line() + geom_point() + facet_grid(stato ~ ., scale = "free_y") + 
+  labs(y = "Cumulative Daily total Covid-19 cases", title = "Covid19 in Italy", 
+       subtitle = "(Note: total units)", caption = "Sources: https://github.com/pcm-dpc/COVID-19") + 
+  theme(legend.position = "top", legend.title = element_blank()) +
+  bestfit
+covid19_it_sum %>%
+  gather(key,value,Perc_nuovi_attualmente_positivi, Perc_tot_attualmente_positivi, Perc_tot_casi, ) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 2) +
+  labs(y = "Growth rate (%)", x = "date", title = "Covid19 in Italy", 
+       caption = "gdr >>>  Sources: https://github.com/pcm-dpc/COVID-19") +
+  bestfit
+
+par(mfrow=c(1,1))
+###   TS analysis test
+#FastFourierTrasform Periodogram 
+require(TSA)
+periodogram(covid19_it_sum$totale_casi)   
+p<-periodogram(covid19_it_sum$totale_casi)
+
+
+dd = data.frame(freq=p$freq, spec=p$spec)
+order = dd[order(-dd$spec),]
+top2 = head(order, 2)
+# display the 2 highest "power" frequencies
+top2
+str(top2)
+top2[,1]
+# 
+
+# convert frequency to time periods
+time = 1/top2$f
+time
+# The main seasonality detected is 24 days (??). A secondary seasonality of 12 days was also found (???)
+# 
+
+library(forecast)
+
+#Esempio funzione ts package {stats}
+tsCovid19_it = ts(rev(covid19_it_sum$totale_casi),start=c(2020, 2),end=c(2020,3),frequency=mean(top2[,1]))
+Acf(tsCovid19_it)
+Pacf(tsCovid19_it)
+(tsCovid19_it2 <- round(acf(tsCovid19_it, 6, plot=F)$acf[-1], 3))
+
+
+tseries<-covid19_it_sum$totale_casi %>% msts( seasonal.periods = c(1, 1*7))
+#Plot 
+tseries  %>% head(  24 *7 *4 ) %>% mstl() %>% autoplot() 
+
+
+
