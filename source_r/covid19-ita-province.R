@@ -22,7 +22,7 @@ str(covid19_it)
 #dim(covid19_it)
 str(covid19_it_sum)
 
-# starting data frame 
+# data frame building
 # convert -data- & -denominazione_regione- columns
 # delete -lat- & -long- columns
 covid19_it     <- as_tibble(covid19_it)
