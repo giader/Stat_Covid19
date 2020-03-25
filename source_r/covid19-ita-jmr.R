@@ -84,8 +84,8 @@ Tot.covid19it <-
 dbDisconnect(conn=con)
 ###############################################################################################################
 
-covid19_it$data     <- as.Date(covid19_it$data) 
-covid19_it_sum$data <- as.Date(covid19_it_sum$data)
+# covid19_it$data     <- as.Date(covid19_it$data) 
+# covid19_it_sum$data <- as.Date(covid19_it_sum$data)
 
 str(covid19_it); str(covid19_it_sum)
 names(covid19_it_sum)
@@ -96,6 +96,10 @@ covid19_it_regions <- covid19_it %>%
   select(everything())  
 
 covid19_Lomb<-covid19_it_regions[covid19_it_regions$codice_regione == 3,  ]
+covid19_Tosc<-covid19_it_regions[covid19_it_regions$codice_regione == 9 & covid19_it_regions$data >= "2020-02-28",  ]
+covid19_Abbr<-covid19_it_regions[covid19_it_regions$codice_regione ==13,  ]
+
+
 
 ts_n = 1  ### Lag
 covid19_Lomb$Perc_nuovi_attualmente_positivi = Perc_covid19(covid19_Lomb$nuovi_attualmente_positivi, ts_n)
@@ -105,6 +109,14 @@ covid19_Lomb$Perc_ricov_con_sintomi = Perc_covid19(covid19_Lomb$ricoverati_con_s
 covid19_Lomb$Perc_terapia_intensiva = Perc_covid19(covid19_Lomb$terapia_intensiva, ts_n)
 covid19_Lomb$Perc_deceduti = Perc_covid19(covid19_Lomb$deceduti, ts_n)
 covid19_Lomb$Perc_tot_casi = Perc_covid19(covid19_Lomb$totale_casi, ts_n)
+
+covid19_Tosc$Perc_nuovi_attualmente_positivi = Perc_covid19(covid19_Tosc$nuovi_attualmente_positivi, ts_n)
+covid19_Tosc$Perc_totale_ospedalizzati = Perc_covid19(covid19_Tosc$totale_ospedalizzati, ts_n)
+covid19_Tosc$Perc_tot_attualmente_positivi = Perc_covid19(covid19_Tosc$totale_attualmente_positivi, ts_n)
+covid19_Tosc$Perc_ricov_con_sintomi = Perc_covid19(covid19_Tosc$ricoverati_con_sintomi, ts_n)
+covid19_Tosc$Perc_terapia_intensiva = Perc_covid19(covid19_Tosc$terapia_intensiva, ts_n)
+covid19_Tosc$Perc_deceduti = Perc_covid19(covid19_Tosc$deceduti, ts_n)
+covid19_Tosc$Perc_tot_casi = Perc_covid19(covid19_Tosc$totale_casi, ts_n)
 
 library(ggplot2)
 png("./images/Covid19_it_3reg.png", 500,500)
@@ -137,6 +149,16 @@ covid19_it_sum %>%
   labs(y = "Total Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
+
+png("./images/Covid19_it_newcases.png", 500,500)
+covid19_it_sum %>%
+  tidyr::gather(key,value,nuovi_attualmente_positivi) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 2) + 
+  labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
+       subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+dev.off()
+
 png("./images/Covid19_it_tamponi.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,tamponi ) %>%
@@ -162,10 +184,22 @@ covid19_Lomb %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 2) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Lombardia, Italy", 
-       subtitle = "(red-%covid19 recovered; green-%tot positive; %tot cases)", 
+       subtitle = "(red-hospitalized; green-%tot positive; %tot cases)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
+png("./images/Covid19_it_Toscana.png", 500,500)
+covid19_Tosc %>%
+  tidyr::gather(key,value,Perc_ricov_con_sintomi, Perc_tot_attualmente_positivi, Perc_tot_casi) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 2) +
+  labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Tuscany, Italy", 
+       subtitle = "(red-hospitalized; green-%tot positive; %tot cases)", 
+       caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
+dev.off()
+
+
+# Bestfit comparison 
 bestfit <- geom_smooth(
   method = "lm", 
   se = FALSE, 
@@ -173,12 +207,6 @@ bestfit <- geom_smooth(
   size = 2
 )
 
-
-
-
-
-
-# Bestfit comparison 
 covid19_it_sum %>% bind_rows(covid19_it_sum) %>% 
   ggplot(aes(x = data, y = totale_casi)) + 
   geom_line() + geom_point() + facet_grid(stato ~ ., scale = "free_y") + 
