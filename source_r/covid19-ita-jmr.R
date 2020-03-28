@@ -162,9 +162,9 @@ dev.off()
 png("./images/Covid19_it_tamponi.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,tamponi ) %>%
-  ggplot(aes(x=data, y=value, colour=key)) +
+  ggplot(aes(x=data, y=value/1000, colour=key)) +
   geom_line(size= 2) + 
-  labs(y = "Total swabs", title = "Covid19 - Italy", 
+  labs(y = "Total swabs (thousands)", title = "Covid19 - Italy", 
        subtitle = "(Note: total swabs)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
@@ -184,7 +184,7 @@ covid19_Lomb %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 2) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Lombardia, Italy", 
-       subtitle = "(red-hospitalized; green-%tot positive; %tot cases)", 
+       subtitle = "(red-%tot hospitalized; green-%tot positive; %tot cases)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
@@ -194,7 +194,7 @@ covid19_Tosc %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 2) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Tuscany, Italy", 
-       subtitle = "(red-hospitalized; green-%tot positive; %tot cases)", 
+       subtitle = "(red-%tot hospitalized; green-%tot positive; %tot cases)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
