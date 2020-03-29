@@ -225,41 +225,8 @@ covid19_it_sum %>%
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19") +
   bestfit
 
-par(mfrow=c(1,1))
-###   TS analysis test
-#FastFourierTrasform Periodogram 
-require(TSA)
-periodogram(covid19_it_sum$totale_casi)   
-p<-periodogram(covid19_it_sum$totale_casi)
 
 
-dd = data.frame(freq=p$freq, spec=p$spec)
-order = dd[order(-dd$spec),]
-top2 = head(order, 2)
-# display the 2 highest "power" frequencies
-top2
-str(top2)
-top2[,1]
-# 
-
-# convert frequency to time periods
-time = 1/top2$f
-time
-# The main seasonality detected is 24 days (??). A secondary seasonality of 12 days was also found (???)
-# 
-
-library(forecast)
-
-#Esempio funzione ts package {stats}
-tsCovid19_it = ts(rev(covid19_it_sum$totale_casi),start=c(2020, 2),end=c(2020,3),frequency=mean(top2[,1]))
-Acf(tsCovid19_it)
-Pacf(tsCovid19_it)
-(tsCovid19_it2 <- round(acf(tsCovid19_it, 6, plot=F)$acf[-1], 3))
-
-
-tseries<-covid19_it_sum$totale_casi %>% msts( seasonal.periods = c(1, 1*7))
-#Plot 
-tseries  %>% head(  24 *7 *4 ) %>% mstl() %>% autoplot() 
 
 
 
