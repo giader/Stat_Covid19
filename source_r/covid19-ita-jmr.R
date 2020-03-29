@@ -47,6 +47,7 @@ covid19_it_sum$Perc_tot_attualmente_positivi = Perc_covid19(covid19_it_sum$total
 covid19_it_sum$Perc_terapia_intensiva = Perc_covid19(covid19_it_sum$terapia_intensiva, ts_n)
 covid19_it_sum$Perc_deceduti = Perc_covid19(covid19_it_sum$deceduti, ts_n)
 covid19_it_sum$Perc_tot_casi = Perc_covid19(covid19_it_sum$totale_casi, ts_n)
+covid19_it_sum$Perc_tamponi = Perc_covid19(covid19_it_sum$tamponi, ts_n)
 
 covid19_it$data     <- as.Date(covid19_it$data) 
 covid19_it_sum$data <- as.Date(covid19_it_sum$data)
@@ -109,6 +110,7 @@ covid19_Lomb$Perc_ricov_con_sintomi = Perc_covid19(covid19_Lomb$ricoverati_con_s
 covid19_Lomb$Perc_terapia_intensiva = Perc_covid19(covid19_Lomb$terapia_intensiva, ts_n)
 covid19_Lomb$Perc_deceduti = Perc_covid19(covid19_Lomb$deceduti, ts_n)
 covid19_Lomb$Perc_tot_casi = Perc_covid19(covid19_Lomb$totale_casi, ts_n)
+covid19_Lomb$Perc_tamponi = Perc_covid19(covid19_Lomb$tamponi, ts_n)
 
 covid19_Tosc$Perc_nuovi_attualmente_positivi = Perc_covid19(covid19_Tosc$nuovi_attualmente_positivi, ts_n)
 covid19_Tosc$Perc_totale_ospedalizzati = Perc_covid19(covid19_Tosc$totale_ospedalizzati, ts_n)
@@ -117,6 +119,7 @@ covid19_Tosc$Perc_ricov_con_sintomi = Perc_covid19(covid19_Tosc$ricoverati_con_s
 covid19_Tosc$Perc_terapia_intensiva = Perc_covid19(covid19_Tosc$terapia_intensiva, ts_n)
 covid19_Tosc$Perc_deceduti = Perc_covid19(covid19_Tosc$deceduti, ts_n)
 covid19_Tosc$Perc_tot_casi = Perc_covid19(covid19_Tosc$totale_casi, ts_n)
+covid19_Tosc$Perc_tamponi = Perc_covid19(covid19_Tosc$tamponi, ts_n)
 
 library(ggplot2)
 png("./images/Covid19_it_3reg.png", 500,500)
@@ -124,7 +127,7 @@ covid19_it_regions %>% bind_rows(covid19_it_regions %>%
                            group_by(data, denominazione_regione) %>% 
                            summarise(totale_casi, deceduti)) %>% 
   ggplot(aes(x = data, y = totale_casi, colour = denominazione_regione)) + 
-  geom_line(size= 2) + geom_point(size= 2) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
+  geom_line(size= 1.5) + geom_point(size= 2) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
   labs(y = "Total Covid-19 cases", title = "Comparison of Italian Regions", 
        subtitle = "(Note: not all regions shown here)", caption = "Source: https://github.com/pcm-dpc/COVID-19") + 
   theme(legend.position = "top", legend.title = element_blank())
@@ -133,7 +136,7 @@ dev.off()
 covid19_it_sum %>%
   tidyr::gather(key,value,nuovi_attualmente_positivi, totale_attualmente_positivi, totale_casi, deceduti, tamponi) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
-  geom_line(size= 2) + 
+  geom_line(size= 1.5) + 
   scale_y_continuous(trans='log')+
   labs(y = "Cumulative Daily total Covid-19 cases logaritm scale ", title = "Covid19 in Italy", 
        subtitle = "(Note: total units in log scale)", caption = "gdr >>> Sources: https://github.com/pcm-dpc/COVID-19") 
@@ -145,7 +148,7 @@ png("./images/Covid19_it_cum.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,nuovi_attualmente_positivi, totale_attualmente_positivi, totale_casi, deceduti) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
-  geom_line(size= 2) + 
+  geom_line(size= 1.5) + 
   labs(y = "Total Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -154,7 +157,7 @@ png("./images/Covid19_it_newcases.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,nuovi_attualmente_positivi) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
-  geom_line(size= 2) + 
+  geom_line(size= 1.5) + 
   labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -163,7 +166,7 @@ png("./images/Covid19_it_tamponi.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,tamponi ) %>%
   ggplot(aes(x=data, y=value/1000, colour=key)) +
-  geom_line(size= 2) + 
+  geom_line(size= 1.5) + 
   labs(y = "Total swabs (thousands)", title = "Covid19 - Italy", 
        subtitle = "(Note: total swabs)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -172,7 +175,7 @@ png("./images/Covid19_it_Perc.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,Perc_nuovi_attualmente_positivi, Perc_tot_attualmente_positivi, Perc_tot_casi) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
-  geom_line(size= 2) +
+  geom_line(size= 1.5) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Italy", 
        subtitle = "(red-%new positive; green-%tot positive; %tot cases)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
@@ -182,7 +185,7 @@ png("./images/Covid19_it_Lombardia.png", 500,500)
 covid19_Lomb %>%
   tidyr::gather(key,value,Perc_ricov_con_sintomi, Perc_tot_attualmente_positivi, Perc_tot_casi) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
-  geom_line(size= 2) +
+  geom_line(size= 1.5) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Lombardia, Italy", 
        subtitle = "(red-%tot hospitalized; green-%tot positive; %tot cases)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
@@ -192,7 +195,7 @@ png("./images/Covid19_it_Toscana.png", 500,500)
 covid19_Tosc %>%
   tidyr::gather(key,value,Perc_ricov_con_sintomi, Perc_tot_attualmente_positivi, Perc_tot_casi) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
-  geom_line(size= 2) +
+  geom_line(size= 1.5) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Tuscany, Italy", 
        subtitle = "(red-%tot hospitalized; green-%tot positive; %tot cases)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
