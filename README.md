@@ -33,6 +33,9 @@ updated every day
 ```
 ![Image Covid19_it_new_cases](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_newcasesSmoothed.png)
 
+![Image Covid19_it_Var_new_cases](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_varnewcasesSmoothed.png)
+
+
 ![Image Covid19_it_Perc](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Perc.png)
 
 ![Image Covid19_it_Lombardia](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Lombardia.png)
