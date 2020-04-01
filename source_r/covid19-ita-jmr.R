@@ -173,6 +173,16 @@ covid19_it_sum %>%
        subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
+png("./images/Covid19_it_varnewcasesSmoothed.png", 500,500)
+covid19_it_sum %>%
+  tidyr::gather(key,value, variazione_totale_positivi ) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 1.5) + 
+  geom_smooth(method="auto", se=TRUE, col="steelblue")
+labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
+     subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+dev.off()
+
 png("./images/Covid19_it_tamponi.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,tamponi ) %>%
