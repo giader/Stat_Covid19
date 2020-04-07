@@ -38,6 +38,6 @@ updated every day
 
 ![Image Covid19_it_Perc](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Perc.png)
 
-![Image Covid19_it_Lombardia](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Lombardia.png)
+///![Image Covid19_it_Lombardia](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_Lombardia.png)
 
 
