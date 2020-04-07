@@ -16,7 +16,7 @@ Feel free to let me know your comments.
 ## Source 
 [source](https://github.com/pcm-dpc/COVID-19)<br>
 
-## Avvisi
+## Warning
 ```diff
 - 18/03/2020: dati Regione Campania non pervenuti.
 - 18/03/2020: dati Provincia di Parma non pervenuti.
