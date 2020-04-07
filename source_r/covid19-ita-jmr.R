@@ -130,7 +130,7 @@ covid19_it_regions %>% bind_rows(covid19_it_regions %>%
   ggplot(aes(x = data, y = totale_casi, colour = denominazione_regione)) + 
   geom_line(size= 1.5) + geom_point(size= 2) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
   labs(y = "Total Covid-19 cases", title = "Comparison of Italian Regions", 
-       subtitle = "(Note: not all regions shown here)", caption = "Source: https://github.com/pcm-dpc/COVID-19") + 
+       subtitle = "(Note: not all regions shown here)", caption = "Data Source: https://github.com/pcm-dpc/COVID-19") + 
   theme(legend.position = "top", legend.title = element_blank())
 dev.off()
 ## Logaritmic scale
@@ -140,7 +140,7 @@ covid19_it_sum %>%
   geom_line(size= 1.5) + 
   scale_y_continuous(trans='log')+
   labs(y = "Cumulative Daily total Covid-19 cases logaritm scale ", title = "Covid19 in Italy", 
-       subtitle = "(Note: total units in log scale)", caption = "gdr >>> Sources: https://github.com/pcm-dpc/COVID-19") 
+       subtitle = "(Note: total units in log scale)", caption = "gdr >>> Data Sources: https://github.com/pcm-dpc/COVID-19") 
 
 ## Standard scale
 
@@ -151,7 +151,7 @@ covid19_it_sum %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.5) + 
   labs(y = "Total Covid-19 cases", title = "Covid19 - Italy", 
-       subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+       subtitle = "(Note: total units)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_newcases.png", 500,500)
@@ -160,7 +160,7 @@ covid19_it_sum %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.5) + 
   labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
-       subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+       subtitle = "(Note: total units)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_newcasesSmoothed.png", 500,500)
@@ -182,7 +182,7 @@ covid19_it_sum %>%
   geom_smooth(method="auto", se=TRUE, col="steelblue") +
   labs(y = "Daily change total positive Covid-19", title = "Covid19 - Italy", 
        subtitle = "(Note: total units) >>  / smoothed method > Local Polynomial Regression Fitting", 
-       caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+       caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_tamponi.png", 500,500)
@@ -191,7 +191,7 @@ covid19_it_sum %>%
   ggplot(aes(x=data, y=value/1000, colour=key)) +
   geom_line(size= 1.5) + 
   labs(y = "Total swabs (thousands)", title = "Covid19 - Italy", 
-       subtitle = "(Note: total swabs)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+       subtitle = "(Note: total swabs)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_Perc.png", 500,500)
@@ -201,7 +201,7 @@ covid19_it_sum %>%
   geom_line(size= 1.5) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Italy", 
        subtitle = "(red-%new positive; green-%tot positive; blue-%change tot positive)", 
-       caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
+       caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
 png("./images/Covid19_it_Lombardia.png", 500,500)
@@ -221,7 +221,7 @@ covid19_Tosc %>%
   geom_line(size= 1.5) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Tuscany, Italy", 
        subtitle = "(red-%tot hospitalized; green-%tot positive; %tot cases)", 
-       caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
+       caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
 
