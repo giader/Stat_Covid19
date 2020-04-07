@@ -31,7 +31,7 @@ covid19_it <- covid19_it %>% select(everything(), -lat, -long)
 
 names(covid19_it); 
 names(covid19_it_sum);
-# new Growth rate columns
+# new Growth rate columns test
 covid19_it_sum$Perc_var_tot_positivi <- (covid19_it_sum$variazione_totale_positivi / 
                                                      lag(covid19_it_sum$variazione_totale_positivi, k=1)-1)
 
@@ -135,7 +135,7 @@ covid19_it_regions %>% bind_rows(covid19_it_regions %>%
 dev.off()
 ## Logaritmic scale
 covid19_it_sum %>%
-  tidyr::gather(key,value,nuovi_attualmente_positivi, totale_attualmente_positivi, totale_casi, deceduti, tamponi) %>%
+  tidyr::gather(key,value,variazione_totale_positivi, nuovi_positivi, totale_casi, deceduti, tamponi) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.5) + 
   scale_y_continuous(trans='log')+
@@ -168,9 +168,10 @@ covid19_it_sum %>%
   tidyr::gather(key,value, nuovi_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.5) + 
-  geom_smooth(method="auto", se=TRUE, col="steelblue")
+  geom_smooth(method="auto", se=TRUE, col="steelblue") +
   labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
-       subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+       subtitle = "(Note: total units) >>  / smoothed method > Local Polynomial Regression Fitting", 
+       caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_varnewcasesSmoothed.png", 500,500)
@@ -178,9 +179,10 @@ covid19_it_sum %>%
   tidyr::gather(key,value, variazione_totale_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.5) + 
-  geom_smooth(method="auto", se=TRUE, col="steelblue")
-labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
-     subtitle = "(Note: total units)", caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
+  geom_smooth(method="auto", se=TRUE, col="steelblue") +
+  labs(y = "Daily change total positive Covid-19", title = "Covid19 - Italy", 
+       subtitle = "(Note: total units) >>  / smoothed method > Local Polynomial Regression Fitting", 
+       caption = "giader >>> Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_tamponi.png", 500,500)
@@ -198,7 +200,7 @@ covid19_it_sum %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.5) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Italy", 
-       subtitle = "(red-%new positive; green-%tot positive; %tot cases)", 
+       subtitle = "(red-%new positive; green-%tot positive; blue-%change tot positive)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
@@ -208,7 +210,7 @@ covid19_Lomb %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.5) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Lombardia, Italy", 
-       subtitle = "(red-%tot hospitalized; green-%tot positive; %tot cases)", 
+       subtitle = "(red-%tot hospitalized; green-%tot positive; blue-%change tot positive)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
