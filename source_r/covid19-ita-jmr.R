@@ -13,6 +13,7 @@ result_nazione <- fromJSON("./Data/dpc-covid19-ita-andamento-nazionale.json", fl
 # head(results)
 # str(result)
 
+
 # Convert JSON file to a data frame.
 covid19_it <- result_regioni
 covid19_it_sum <- result_nazione
@@ -41,7 +42,7 @@ Perc_covid19 <- function(x, n) {
 }
 
 ts_n = 1  ### Lag
-covid19_it_sum$Perc_var_tot_positivi = Perc_covid19(covid19_it_sum$variazione_totale_positivi, ts_n)
+## covid19_it_sum$Perc_var_tot_positivi = Perc_covid19(covid19_it_sum$variazione_totale_positivi, ts_n)
 covid19_it_sum$Perc_totale_ospedalizzati = Perc_covid19(covid19_it_sum$totale_ospedalizzati, ts_n)
 covid19_it_sum$Perc_nuovi_positivi = Perc_covid19(covid19_it_sum$nuovi_positivi, ts_n)
 covid19_it_sum$Perc_terapia_intensiva = Perc_covid19(covid19_it_sum$terapia_intensiva, ts_n)
@@ -100,7 +101,6 @@ covid19_Lomb<-covid19_it_regions[covid19_it_regions$codice_regione == 3,  ]
 ##covid19_Tosc<-covid19_it_regions[covid19_it_regions$codice_regione == 9 & covid19_it_regions$data >= "2020-02-28",  ]
 covid19_Tosc<-covid19_it_regions[covid19_it_regions$codice_regione == 9,  ]
 covid19_Abbr<-covid19_it_regions[covid19_it_regions$codice_regione ==13,  ]
-
 
 
 ts_n = 1  ### Lag
@@ -181,7 +181,7 @@ covid19_it_sum %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
   geom_smooth(method="auto", se=TRUE, col="steelblue") +
-  labs(y = "Daily change total positive Covid-19", title = "Covid19 - Italy", 
+  labs(y = "Daily change total positives Covid-19", title = "Covid19 - Italy", 
        subtitle = "(Note: total units) >> smoothed method > Local Polynomial Regression Fitting", 
        caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -195,25 +195,36 @@ covid19_it_sum %>%
        subtitle = "(Note: total swabs)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
+png("./images/Covid19_it_varTamponi.png", 500,500)
+covid19_it_sum %>%
+  tidyr::gather(key,value, Perc_tamponi, Perc_totale_ospedalizzati ) %>%
+  filter(data >= "2020-02-28") %>% 
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 1.3) + 
+  labs(y = "Growth rate (%) d/d", title = "Covid19 - Italy", 
+       subtitle = "(red-%new swabs; blue-%tot hospitalized)", 
+       caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
+dev.off()
+
 png("./images/Covid19_it_Perc.png", 500,500)
 covid19_it_sum %>%
-  tidyr::gather(key,value,Perc_var_tot_positivi, Perc_nuovi_positivi, Perc_tot_casi) %>%
+  tidyr::gather(key,value, Perc_nuovi_positivi, Perc_tot_casi) %>%
   filter(data >= "2020-02-28") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Italy", 
-       subtitle = "(red-%new positive; green-%tot positive; blue-%change tot positive)", 
+       subtitle = "(red-%new positives; blue-%change tot positives)", 
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
 png("./images/Covid19_it_Lombardia.png", 500,500)
 covid19_Lomb %>%
   tidyr::gather(key,value,Perc_nuovi_positivi, Perc_tot_casi) %>%
-  filter(data >= "2020-02-28") %>% 
+  filter(data >= "2020-02-29") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Lombardia, Italy", 
-       subtitle = "(red-%tot hospitalized; green-%tot positive; blue-%change tot positive)", 
+       subtitle = "(red-%new positives; blue-%change tot positives)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
@@ -224,12 +235,49 @@ covid19_Tosc %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Tuscany, Italy", 
-       subtitle = "(red-%tot hospitalized; green-%tot positive; %tot cases)", 
+       subtitle = "(red-%new positives; %tot cases)", 
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
+##########################################################################################
+# R0 calculation 
+lcheck2 <- require(EpiEstim) & require(dplyr) & require(jsonlite) & require(ggplot2)
 
-# Bestfit comparison 
+library(incidence)
+library(echarts4r)
+library(earlyR)
+library(epitrix)
+library(projections)
+library(EpiEstim)
+
+
+
+
+# custom results plotting function to avoid the ugly
+# TableGrob messages returned by the plotting function in the
+# EpiEstim package
+plot_Ri <- function(estimate_R_obj) {
+  p_I <- plot(estimate_R_obj, "incid", add_imported_cases = TRUE)  # plots the incidence
+  p_SI <- plot(estimate_R_obj, "SI")  # plots the serial interval distribution
+  p_Ri <- plot(estimate_R_obj, "R")
+  return(gridExtra::grid.arrange(p_I, p_SI, p_Ri, ncol = 1))
+}
+
+
+IT_res_parametric_si <- EstimateR(covid19_it_sum$totale_casi, method = "ParametricSI", 
+                                  T.Start = covid19_it_sum$data[5:51], T.End = Sys.Date(), 
+                                  Mean.SI = 7.5, Std.SI = 3.4)
+#                                   config = make_config(list(mean_si = 7.5, std_si = 3.4)))
+
+
+plot_Ri(hubei_res_parametric_si)
+
+
+
+
+
+###########################################################################################
+#### Bestfit comparison 
 bestfit <- geom_smooth(
   method = "lm", 
   se = FALSE, 
