@@ -160,8 +160,26 @@ covid19_it_sum %>%
   tidyr::gather(key,value,variazione_totale_positivi, nuovi_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
-  labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
+  labs(y = "New incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
+dev.off()
+
+png("./images/Covid19_it_TerapiaInt.png", 500,500)
+covid19_it_sum %>%
+  tidyr::gather(key,value,terapia_intensiva) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 1.3) + 
+  labs(y = "New figures on intensive care", title = "Covid19 - Italy", 
+       subtitle = "(red- intensive care cases)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
+dev.off()
+
+png("./images/Covid19_it_PercTerapiaInt.png", 500,500)
+covid19_it_sum %>%
+  tidyr::gather(key,value,Perc_terapia_intensiva) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 1.3) + 
+  labs(y = "Growth rate (%) d/d", title = "Covid19 - Italy", 
+       subtitle = "(red- %intensive care)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_newcasesSmoothed.png", 500,500)
