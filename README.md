@@ -31,6 +31,8 @@ Feel free to let me know your comments.
 ```diff
 updated every day
 ```
+![Image Covid19_it_perTerapiaInt](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_newcasesSmoothed.png)
+
 ![Image Covid19_it_new_cases](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_newcasesSmoothed.png)
 
 ![Image Covid19_it_Var_new_cases](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_varnewcasesSmoothed.png)
