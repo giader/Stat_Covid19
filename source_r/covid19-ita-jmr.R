@@ -53,6 +53,8 @@ covid19_it_sum$Perc_tamponi = Perc_covid19(covid19_it_sum$tamponi, ts_n)
 covid19_it$data     <- as.Date(covid19_it$data) 
 covid19_it_sum$data <- as.Date(covid19_it_sum$data)
 
+write.csv2(covid19_it_sum, "./covid19_it_sum.csv")
+
 ##
 covid19_it_col <- c(names(covid19_it_sum[-(1:2)]) )  # elimino le prime due colonne
 covid19_it_col[5]
@@ -68,7 +70,7 @@ dbWriteTable(conn = con, name = "tbl_covid19it", value = covid19_it)
 
 con_dplyr <- src_sqlite('covid19it.sqlite')
 
-tbl_covid19it <- tbl(con_dplyr, "tbl_covid19it")
+tbl_covid19it <- tbl(con_dplyr, "tbl_coid19it")
 
 tbl_covid19it %>%
   group_by(data, codice_regione, denominazione_regione) %>%
@@ -283,12 +285,13 @@ plot_Ri <- function(estimate_R_obj) {
 
 
 IT_res_parametric_si <- EstimateR(covid19_it_sum$totale_casi, method = "ParametricSI", 
-                                  T.Start = covid19_it_sum$data[5:51], T.End = Sys.Date(), 
+                                  T.Start = c(5:51), T.End = c(5:51), 
+#                                  T.Start = covid19_it_sum$data[5:51], T.End = Sys.Date(), 
                                   Mean.SI = 7.5, Std.SI = 3.4)
 #                                   config = make_config(list(mean_si = 7.5, std_si = 3.4)))
 
 
-plot_Ri(hubei_res_parametric_si)
+plot_Ri(IT_res_parametric_si)
 
 
 
