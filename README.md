@@ -18,7 +18,7 @@ Feel free to let me know your comments.
 
 ## Graphs 
 ```diff
-updated every day
+weekly update
 ```
 ![Image Covid19_it_new_cases](https://github.com/giader/Stat_Covid19/blob/master/images/Covid19_it_newcasesSmoothed.png)
 
