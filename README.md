@@ -33,8 +33,4 @@ weekly update
 
 ![Image Covid19_Sicily_Perc](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_Sicily_newcasesSmoothed.png)
 
-![Image Covid19_Sicily_PercPos](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_Sicily_newPositive.png)
-
-
-
 
