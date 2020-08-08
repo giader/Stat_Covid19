@@ -36,15 +36,20 @@ names(covid19_it_sum);
 covid19_it_sum$Perc_var_tot_positivi <- (covid19_it_sum$variazione_totale_positivi / 
                                                      lag(covid19_it_sum$variazione_totale_positivi, k=1)-1)
 
-# Growth rate function
+# Growth rate function  ( (x/y-1)*100) 
 Perc_covid19 <- function(x, n) {
   y <- 100*(x / lag(x, k=n)-1)
+}
+
+# Growth rate function  ( (x/y)*100) 
+Perc_covid19bis <- function(x, n) {
+  y <- 100*((x / lag(x, k=n))-1)
 }
 
 ts_n = 1  ### Lag
 ## covid19_it_sum$Perc_var_tot_positivi = Perc_covid19(covid19_it_sum$variazione_totale_positivi, ts_n)
 covid19_it_sum$Perc_totale_ospedalizzati = Perc_covid19(covid19_it_sum$totale_ospedalizzati, ts_n)
-covid19_it_sum$Perc_nuovi_positivi = Perc_covid19(covid19_it_sum$nuovi_positivi, ts_n)
+covid19_it_sum$Perc_nuovi_positivi = Perc_covid19bis(covid19_it_sum$nuovi_positivi, ts_n)
 covid19_it_sum$Perc_terapia_intensiva = Perc_covid19(covid19_it_sum$terapia_intensiva, ts_n)
 covid19_it_sum$Perc_deceduti = Perc_covid19(covid19_it_sum$deceduti, ts_n)
 covid19_it_sum$Perc_tot_casi = Perc_covid19(covid19_it_sum$totale_casi, ts_n)
@@ -96,41 +101,52 @@ names(covid19_it_sum)
 
 # regions <- c("Abruzzo", "Lombardia", "Toscana")
 covid19_it_regions <- covid19_it %>%
-  filter(codice_regione == 3 | codice_regione == 9 | codice_regione == 13 ) %>%
+  filter(codice_regione == 3 | codice_regione == 9 | codice_regione == 13 | codice_regione == 19 ) %>%
   select(everything())  
 
 covid19_Lomb<-covid19_it_regions[covid19_it_regions$codice_regione == 3,  ]
 ##covid19_Tosc<-covid19_it_regions[covid19_it_regions$codice_regione == 9 & covid19_it_regions$data >= "2020-02-28",  ]
 covid19_Tosc<-covid19_it_regions[covid19_it_regions$codice_regione == 9,  ]
 covid19_Abbr<-covid19_it_regions[covid19_it_regions$codice_regione ==13,  ]
+covid19_Sicily<-covid19_it_regions[covid19_it_regions$codice_regione ==19,  ]
 
 
 ts_n = 1  ### Lag
-covid19_Lomb$Perc_var_tot_positivi = Perc_covid19(covid19_Lomb$variazione_totale_positivi, ts_n)
+covid19_Lomb$Perc_var_tot_positivi = Perc_covid19bis(covid19_Lomb$variazione_totale_positivi, ts_n)
 covid19_Lomb$Perc_totale_ospedalizzati = Perc_covid19(covid19_Lomb$totale_ospedalizzati, ts_n)
-covid19_Lomb$Perc_nuovi_positivi = Perc_covid19(covid19_Lomb$nuovi_positivi, ts_n)
+covid19_Lomb$Perc_nuovi_positivi = Perc_covid19bis(covid19_Lomb$nuovi_positivi, ts_n)
 covid19_Lomb$Perc_ricov_con_sintomi = Perc_covid19(covid19_Lomb$ricoverati_con_sintomi, ts_n)
 covid19_Lomb$Perc_terapia_intensiva = Perc_covid19(covid19_Lomb$terapia_intensiva, ts_n)
 covid19_Lomb$Perc_deceduti = Perc_covid19(covid19_Lomb$deceduti, ts_n)
 covid19_Lomb$Perc_tot_casi = Perc_covid19(covid19_Lomb$totale_casi, ts_n)
 covid19_Lomb$Perc_tamponi = Perc_covid19(covid19_Lomb$tamponi, ts_n)
 
-covid19_Tosc$Perc_var_tot_positivi = Perc_covid19(covid19_Tosc$variazione_totale_positivi, ts_n)
+covid19_Tosc$Perc_var_tot_positivi = Perc_covid19bis(covid19_Tosc$variazione_totale_positivi, ts_n)
 covid19_Tosc$Perc_totale_ospedalizzati = Perc_covid19(covid19_Tosc$totale_ospedalizzati, ts_n)
-covid19_Tosc$Perc_nuovi_positivi = Perc_covid19(covid19_Tosc$nuovi_positivi, ts_n)
+covid19_Tosc$Perc_nuovi_positivi = Perc_covid19bis(covid19_Tosc$nuovi_positivi, ts_n)
 covid19_Tosc$Perc_ricov_con_sintomi = Perc_covid19(covid19_Tosc$ricoverati_con_sintomi, ts_n)
 covid19_Tosc$Perc_terapia_intensiva = Perc_covid19(covid19_Tosc$terapia_intensiva, ts_n)
 covid19_Tosc$Perc_deceduti = Perc_covid19(covid19_Tosc$deceduti, ts_n)
 covid19_Tosc$Perc_tot_casi = Perc_covid19(covid19_Tosc$totale_casi, ts_n)
 covid19_Tosc$Perc_tamponi = Perc_covid19(covid19_Tosc$tamponi, ts_n)
 
+covid19_Sicily$Perc_var_tot_positivi = Perc_covid19bis(covid19_Sicily$variazione_totale_positivi, ts_n)
+covid19_Sicily$Perc_totale_ospedalizzati = Perc_covid19(covid19_Sicily$totale_ospedalizzati, ts_n)
+covid19_Sicily$Perc_nuovi_positivi = Perc_covid19bis(covid19_Sicily$nuovi_positivi, ts_n)
+covid19_Sicily$Perc_ricov_con_sintomi = Perc_covid19(covid19_Sicily$ricoverati_con_sintomi, ts_n)
+covid19_Sicily$Perc_terapia_intensiva = Perc_covid19(covid19_Sicily$terapia_intensiva, ts_n)
+covid19_Sicily$Perc_deceduti = Perc_covid19(covid19_Sicily$deceduti, ts_n)
+covid19_Sicily$Perc_tot_casi = Perc_covid19(covid19_Sicily$totale_casi, ts_n)
+covid19_Sicily$Perc_tamponi = Perc_covid19(covid19_Sicily$tamponi, ts_n)
+
 #require(ggplot2)
-png("./images/Covid19_it_3reg.png", 500,500)
+png("./images/Covid19_it_4reg.png", 500,500)
 covid19_it_regions %>% bind_rows(covid19_it_regions %>% 
                            group_by(data, denominazione_regione) %>% 
-                           summarise(totale_casi, deceduti)) %>% 
+                           summarise(totale_casi)) %>% 
   ggplot(aes(x = data, y = totale_casi, colour = denominazione_regione)) + 
-  geom_line(size= 1.3) + geom_point(size= 2) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
+#  geom_line(size= 1.3) + geom_point(size= 2) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
+  geom_bar(stat= "identity", fill="white") + geom_point(size= 1.5) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
   labs(y = "Total Covid-19 cases", title = "Comparison of Italian Regions", 
        subtitle = "(Note: not all regions shown here)", caption = "Data Source: https://github.com/pcm-dpc/COVID-19") + 
   theme(legend.position = "top", legend.title = element_blank())
@@ -255,6 +271,28 @@ covid19_Tosc %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Tuscany, Italy", 
+       subtitle = "(red-%new positives; %tot cases)", 
+       caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
+dev.off()
+
+png("./images/Covid19_it_Sicily_newcasesSmoothed.png", 500,500)
+covid19_Sicily %>%
+  tidyr::gather(key,value, nuovi_positivi ) %>%
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 1.3) + 
+  geom_smooth(method="auto", se=TRUE, col="steelblue") +
+  labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy >> Sicily", 
+       subtitle = "(Note: total units) >> smoothed method > Local Polynomial Regression Fitting", 
+       caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
+dev.off()
+
+png("./images/Covid19_it_Sicily_newPositive.png", 500,500)
+covid19_Sicily %>%
+  tidyr::gather(key,value,Perc_nuovi_positivi, Perc_tot_casi) %>%
+  filter(data >= "2020-03-01") %>% 
+  ggplot(aes(x=data, y=value, colour=key)) +
+  geom_line(size= 1.3) +
+  labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Sicily, Italy", 
        subtitle = "(red-%new positives; %tot cases)", 
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
