@@ -60,6 +60,7 @@ covid19_it_sum$data <- as.Date(covid19_it_sum$data)
 
 write.csv2(covid19_it_sum, "./covid19_it_sum.csv")
 
+
 ##
 covid19_it_col <- c(names(covid19_it_sum[-(1:2)]) )  # elimino le prime due colonne
 covid19_it_col[5]
@@ -103,7 +104,7 @@ names(covid19_it_sum)
 covid19_it_regions <- covid19_it %>%
   filter(codice_regione == 3 | codice_regione == 9 | codice_regione == 13 | codice_regione == 19 ) %>%
   select(everything())  
-
+write.csv2(covid19_it_regions, "./covid19_it_regions.csv")
 covid19_Lomb<-covid19_it_regions[covid19_it_regions$codice_regione == 3,  ]
 ##covid19_Tosc<-covid19_it_regions[covid19_it_regions$codice_regione == 9 & covid19_it_regions$data >= "2020-02-28",  ]
 covid19_Tosc<-covid19_it_regions[covid19_it_regions$codice_regione == 9,  ]
