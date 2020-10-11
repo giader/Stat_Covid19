@@ -163,6 +163,18 @@ covid19_it_sum %>%
 
 ## Standard scale
 # Number of patients in intensive care units
+fancy_scientific <- function(l) {
+  # turn in to character string in scientific notation
+  l <- format(l, scientific = TRUE)
+  # quote the part before the exponent to keep all the digits
+  l <- gsub("^(.*)e", "'\\1'e", l)
+  # turn the 'e+' into plotmath format
+  l <- gsub("e", "%*%10^", l)
+  # return this as an expression
+  parse(text=l)
+}
+
+fmt<-function(x){format(x,nsmall = 0,scientific = FALSE)}
 
 # save plot images
 png("./images/Covid19_it_cum.png", 500,500)
@@ -170,6 +182,7 @@ covid19_it_sum %>%
   tidyr::gather(key,value,variazione_totale_positivi, nuovi_positivi, totale_casi, deceduti) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
+  scale_y_continuous(labels=fmt) +
   labs(y = "Total Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -179,6 +192,7 @@ covid19_it_sum %>%
   tidyr::gather(key,value,variazione_totale_positivi, nuovi_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
+  scale_y_continuous(labels=fmt) +
   labs(y = "New incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -188,6 +202,7 @@ covid19_it_sum %>%
   tidyr::gather(key,value,terapia_intensiva) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
+  scale_y_continuous(labels=fmt) +
   labs(y = "New figures on intensive care", title = "Covid19 - Italy", 
        subtitle = "(red- intensive care cases)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -197,6 +212,7 @@ covid19_it_sum %>%
   tidyr::gather(key,value,Perc_terapia_intensiva) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
+  scale_y_continuous(labels=fmt) +
   labs(y = "Growth rate (%) d/d", title = "Covid19 - Italy", 
        subtitle = "(red- %intensive care)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
@@ -206,7 +222,8 @@ covid19_it_sum %>%
   tidyr::gather(key,value, nuovi_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
-  geom_smooth(method="auto", se=TRUE, col="steelblue") +
+  scale_y_continuous(labels=fmt) +
+  geom_smooth(method="loess", se=TRUE, col="steelblue") +
   labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units) >> smoothed method > Local Polynomial Regression Fitting", 
        caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
@@ -217,6 +234,7 @@ covid19_it_sum %>%
   tidyr::gather(key,value, variazione_totale_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
+  scale_y_continuous(labels=fmt) +
   geom_smooth(method="auto", se=TRUE, col="steelblue") +
   labs(y = "Daily change total positives Covid-19", title = "Covid19 - Italy", 
        subtitle = "(Note: total units) >> smoothed method > Local Polynomial Regression Fitting", 
@@ -238,6 +256,7 @@ covid19_it_sum %>%
   filter(data >= "2020-02-28") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
+  scale_y_continuous(labels=fmt) +
   labs(y = "Growth rate (%) d/d", title = "Covid19 - Italy", 
        subtitle = "(red-%new swabs; blue-%tot hospitalized)", 
        caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
@@ -249,6 +268,7 @@ covid19_it_sum %>%
   filter(data >= "2020-02-28") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
+  scale_y_continuous(labels=fmt) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Italy", 
        subtitle = "(red-%new positives; blue-%change tot positives)", 
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
@@ -260,6 +280,7 @@ covid19_Lomb %>%
   filter(data >= "2020-02-29") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
+  scale_y_continuous(labels=fmt) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Lombardia, Italy", 
        subtitle = "(red-%new positives; blue-%change tot positives)", 
        caption = "giader >>>  Source: https://github.com/pcm-dpc/COVID-19")
@@ -271,6 +292,7 @@ covid19_Tosc %>%
   filter(data >= "2020-03-01") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
+  scale_y_continuous(labels=fmt) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Tuscany, Italy", 
        subtitle = "(red-%new positives; %tot cases)", 
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
@@ -281,6 +303,7 @@ covid19_Sicily %>%
   tidyr::gather(key,value, nuovi_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
+  scale_y_continuous(labels=fmt) +
   geom_smooth(method="auto", se=TRUE, col="steelblue") +
   labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy >> Sicily", 
        subtitle = "(Note: total units) >> smoothed method > Local Polynomial Regression Fitting", 
@@ -293,6 +316,7 @@ covid19_Sicily %>%
   filter(data >= "2020-03-01") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
+  scale_y_continuous(labels=fmt) +
   labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Sicily, Italy", 
        subtitle = "(red-%new positives; %tot cases)", 
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
