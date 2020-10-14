@@ -17,9 +17,9 @@ result_nazione <- fromJSON("./Data/dpc-covid19-ita-andamento-nazionale.json", fl
 # Convert JSON file to a data frame.
 covid19_it <- result_regioni
 covid19_it_sum <- result_nazione
-str(covid19_it)
+#str(covid19_it)
 #dim(covid19_it)
-str(covid19_it_sum)
+#str(covid19_it_sum)
 
 # data frame building
 # convert -data- & -denominazione_regione- columns
