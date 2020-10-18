@@ -2,6 +2,7 @@
 setwd("C:/Users/Gianni/Dropbox/R_JSON")
 load("./R_json.RData")
 save.image("./R_json.RData") 
+rm(list=ls())  
 # Using the logical operator &, it's possible to load all three packages at once and store the result in a single variable.
 lcheck <- require(rjson) & require(dplyr) & require(jsonlite) & require(ggplot2)
 
@@ -131,14 +132,14 @@ covid19_Tosc$Perc_deceduti = Perc_covid19(covid19_Tosc$deceduti, ts_n)
 covid19_Tosc$Perc_tot_casi = Perc_covid19(covid19_Tosc$totale_casi, ts_n)
 covid19_Tosc$Perc_tamponi = Perc_covid19(covid19_Tosc$tamponi, ts_n)
 
-covid19_Sicily$Perc_var_tot_positivi = Perc_covid19bis(covid19_Sicily$variazione_totale_positivi, ts_n)
-covid19_Sicily$Perc_totale_ospedalizzati = Perc_covid19(covid19_Sicily$totale_ospedalizzati, ts_n)
-covid19_Sicily$Perc_nuovi_positivi = Perc_covid19bis(covid19_Sicily$nuovi_positivi, ts_n)
-covid19_Sicily$Perc_ricov_con_sintomi = Perc_covid19(covid19_Sicily$ricoverati_con_sintomi, ts_n)
-covid19_Sicily$Perc_terapia_intensiva = Perc_covid19(covid19_Sicily$terapia_intensiva, ts_n)
-covid19_Sicily$Perc_deceduti = Perc_covid19(covid19_Sicily$deceduti, ts_n)
-covid19_Sicily$Perc_tot_casi = Perc_covid19(covid19_Sicily$totale_casi, ts_n)
-covid19_Sicily$Perc_tamponi = Perc_covid19(covid19_Sicily$tamponi, ts_n)
+covid19_Abbr$Perc_var_tot_positivi = Perc_covid19bis(covid19_Abbr$variazione_totale_positivi, ts_n)
+covid19_Abbr$Perc_totale_ospedalizzati = Perc_covid19(covid19_Abbr$totale_ospedalizzati, ts_n)
+covid19_Abbr$Perc_nuovi_positivi = Perc_covid19bis(covid19_Abbr$nuovi_positivi, ts_n)
+covid19_Abbr$Perc_ricov_con_sintomi = Perc_covid19(covid19_Abbr$ricoverati_con_sintomi, ts_n)
+covid19_Abbr$Perc_terapia_intensiva = Perc_covid19(covid19_Abbr$terapia_intensiva, ts_n)
+covid19_Abbr$Perc_deceduti = Perc_covid19(covid19_Abbr$deceduti, ts_n)
+covid19_Abbr$Perc_tot_casi = Perc_covid19(covid19_Abbr$totale_casi, ts_n)
+covid19_Abbr$Perc_tamponi = Perc_covid19(covid19_Abbr$tamponi, ts_n)
 
 #require(ggplot2)
 png("./images/Covid19_it_4reg.png", 500,500)
@@ -298,26 +299,26 @@ covid19_Tosc %>%
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
 
-png("./images/Covid19_it_Sicily_newcasesSmoothed.png", 500,500)
-covid19_Sicily %>%
+png("./images/Covid19_it_Abbruzzo_newcasesSmoothed.png", 500,500)
+covid19_Abbr %>%
   tidyr::gather(key,value, nuovi_positivi ) %>%
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) + 
   scale_y_continuous(labels=fmt) +
   geom_smooth(method="auto", se=TRUE, col="steelblue") +
-  labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy >> Sicily", 
+  labs(y = "Daily new incident confirmed Covid-19 cases", title = "Covid19 - Italy >> Abbruzzo", 
        subtitle = "(Note: total units) >> smoothed method > Local Polynomial Regression Fitting", 
        caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
-png("./images/Covid19_it_Sicily_newPositive.png", 500,500)
-covid19_Sicily %>%
+png("./images/Covid19_it_Abbruzzo_newPositive.png", 500,500)
+covid19_Abbr %>%
   tidyr::gather(key,value,Perc_nuovi_positivi, Perc_tot_casi) %>%
   filter(data >= "2020-03-01") %>% 
   ggplot(aes(x=data, y=value, colour=key)) +
   geom_line(size= 1.3) +
   scale_y_continuous(labels=fmt) +
-  labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Sicily, Italy", 
+  labs(y = "Growth rate (%) d/d", x = "date", title = "Covid19 - Abbruzzo, Italy", 
        subtitle = "(red-%new positives; %tot cases)", 
        caption = "giader >>>  Data Source: https://github.com/pcm-dpc/COVID-19")
 dev.off()
