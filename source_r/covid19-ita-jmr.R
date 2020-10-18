@@ -2,7 +2,7 @@
 setwd("C:/Users/Gianni/Dropbox/R_JSON")
 load("./R_json.RData")
 save.image("./R_json.RData") 
-rm(list=ls())  
+# rm(list=ls())  
 # Using the logical operator &, it's possible to load all three packages at once and store the result in a single variable.
 lcheck <- require(rjson) & require(dplyr) & require(jsonlite) & require(ggplot2)
 
