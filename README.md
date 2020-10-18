@@ -32,6 +32,6 @@ weekly update
 
 ![Image Covid19_it_Perc](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_Perc.png)
 
-![Image Covid19_Sicily_Perc](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_Sicily_newcasesSmoothed.png)
+![Image Covid19_Abbruzzi_Perc](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_Abbruzzi_newcasesSmoothed.png)
 
 
