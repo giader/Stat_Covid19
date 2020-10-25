@@ -354,10 +354,20 @@ IT_res_parametric_si <- EstimateR(covid19_it_sum$totale_casi, method = "Parametr
                                   Mean.SI = 7.5, Std.SI = 3.4)
 #                                   config = make_config(list(mean_si = 7.5, std_si = 3.4)))
 
+IT_res_parametric_si <- estimate_R(covid19_it_sum$totale_casi, method = "parametric_si", 
+                                   config=make_config(list(
+                                     mean_si = 5.6, std_mean_si = 6,
+                                     min_mean_si = 1, max_mean_si = 7,
+                                     std_si = 3.5, std_std_si = 3.5,
+                                     min_std_si = 1.5, max_std_si = 4
+                                   )))
+                                  #   ,
+                                  #   n1 = 1000, n2 = 1000)))
+
+                                  #, t_start = c(5:51), t_end = c(5:51)
+                                  #, mean_si = 7.5, std_si = 3.4)
 
 plot_Ri(IT_res_parametric_si)
-
-
 
 
 
