@@ -401,6 +401,38 @@
     },
     {
         "data": "2020-11-04T17:00:00",
-        "note": "La Regione Campania comunica che nei dati di ieri, per mero errore materiale, sono stati aggiunti 45 posti di Terapia Intensiva in più. La Regione Emilia Romagna comunica che in seguito a verifica sui dati sono stati eliminati 2 casi in quanto giudicati non casi COVID-19. La Regione Calabria comunica che ieri c'è stato un aggiornamento del bollettino regionale, che riporta una modifica nella distribuzione dei casi ricoverati e terapie intensive. Tale modifica è stata effettuata a seguito delle comunicazioni pervenute dall’azienda ospedaliera di Reggio Calabria e dall’Azienda ospedaliera di Cosenza."
+        "note": "La Regione Campania comunica che nei dati di ieri, per mero errore materiale, sono stati aggiunti 45 posti di Terapia Intensiva in più. La Regione Emilia Romagna comunica che in seguito a verifica sui dati sono stati eliminati 2 casi in quanto giudicati non casi COVID-19. La Regione Calabria comunica che ieri c'è stato un aggiornamento del bollettino regionale, che riporta una modifica nella distribuzione dei casi ricoverati e terapie intensive. Tale modifica è stata effettuata a seguito delle comunicazioni pervenute dall\u2019azienda ospedaliera di Reggio Calabria e dall\u2019Azienda ospedaliera di Cosenza."
+    },
+    {
+        "data": "2020-11-05T17:00:00",
+        "note": "La Regione Emilia Romagna comunica che in seguito a verifica sui dati sono stati eliminati 3 casi in quanto giudicati non casi COVID-19. La Regione Calabria comunica che il numero dei decessi a ieri era 124, e non 125. La Regione Toscana comunica che il numero dei decessi a ieri era 1445, e non 1461. Il numero dei decessi nel report è stato aggiornato correttamente."
+    },
+    {
+        "data": "2020-11-06T17:00:00",
+        "note": "La Regione Abruzzo comunica che dal totale dei casi positivi sono stati eliminati 3 casi del 05/11/2020 in quanto duplicati e un caso in quanto già in carico ad altra regione. La Regione Emilia Romagna comunica che in seguito a verifica sui dati comunicati nei giorni passati sono stati eliminati 3 casi in quanto giudicati non casi COVID-19."
+    },
+    {
+        "data": "2020-11-07T17:00:00",
+        "note": "La Regione Emilia Romagna comunica che in seguito a verifica sui dati comunicati nei giorni passati è stato eliminato 1 caso in quanto giudicato non caso COVID-19; La Regione Abruzzo comunica che dal totale dei casi positivi è stato eliminato 1 caso in quanto duplicato."
+    },
+    {
+        "data": "2020-11-08T17:00:00",
+        "note": "La Regione Abruzzo comunica che dal totale dei casi positivi è stato eliminato 1 caso in quanto paziente non covid; La Regione Emilia Romagna comunica che in seguito a verifica sui dati comunicati nei giorni passati è stato eliminato 1 caso in quanto giudicato non caso COVID-19;"
+    },
+    {
+        "data": "2020-11-09T17:00:00",
+        "note": "La Regione Abruzzo comunica che dal totale dei casi positivi è stato eliminato 1 caso in quanto duplicato; La Regione Emilia Romagna comunica che in seguito a verifica sui dati comunicati nei giorni passati è stato eliminato 1 caso in quanto giudicato non caso COVID-19."
+    },
+    {
+        "data": "2020-11-10T17:00:00",
+        "note": "La Regione Abruzzo segnala che sono stati conteggiati anche 21 decessi delle scorse 3 settimane, comunicati oggi dalla ASL 201 ed il cui dettaglio é stato inserito oggi nel portale ISS. Oggi è stato sottratto 1 caso dal totale dei positivi, a seguito di controlli sui dati anagrafici. La Regione Emilia Romagna segnala che in seguito a verifica sui dati comunicati nei giorni passati sono stati eliminati 7 casi in quanto giudicati non casi COVID-19."
+    },
+    {
+        "data": "2020-11-12T17:00:00",
+        "note": "La Regione Emilia Romagna comunica che in seguito a verifica sui dati comunicati nei giorni passati è stato eliminato 1 caso in quanto giudicato non caso COVID-19."
+    },
+    {
+        "data": "2020-11-14T17:00:00",
+        "note": "La regione BASILICATA segnala che i totali tamponi effettuati/casi testati e i totali dei casi positivi sono in corso di revisione. La regione Emilia Romagna segnala che in seguito a verifica sui dati comunicati nei giorni passati sono stati eliminati 6 casi in quanto giudicati non casi COVID-19."
     }
 ]
