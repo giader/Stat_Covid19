@@ -149,6 +149,7 @@ covid19_it_regions %>% bind_rows(covid19_it_regions %>%
   ggplot(aes(x = data, y = totale_casi, colour = denominazione_regione)) + 
 #  geom_line(size= 1.3) + geom_point(size= 2) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
   geom_bar(stat= "identity", fill="white") + geom_point(size= 1.5) + facet_grid(denominazione_regione ~ ., scale = "free_y") + 
+  scale_y_continuous(labels=fmt) +
   labs(y = "Total Covid-19 cases", title = "Comparison of Italian Regions", 
        subtitle = "(Note: not all regions shown here)", caption = "Data Source: https://github.com/pcm-dpc/COVID-19") + 
   theme(legend.position = "top", legend.title = element_blank())
@@ -367,8 +368,9 @@ IT_res_parametric_si <- estimate_R(covid19_it_sum$totale_casi, method = "paramet
                                   #, t_start = c(5:51), t_end = c(5:51)
                                   #, mean_si = 7.5, std_si = 3.4)
 
+png("./images/Covid19_it_EstimatedRt.png", 500,500)
 plot_Ri(IT_res_parametric_si)
-
+dev.off()
 
 
 ###########################################################################################
