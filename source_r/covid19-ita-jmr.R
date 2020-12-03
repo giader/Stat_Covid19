@@ -189,6 +189,32 @@ covid19_it_sum %>%
        subtitle = "(Note: total units)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
+# tot_casiColor <- "#69b3a2"
+# otherColor <- rgb(0.2, 0.6, 0.9, 1)
+# scaleFactor <- max(covid19_it_sum$totale_casi) / max(covid19_it_sum$nuovi_positivi) ###*1/2
+## scaleFactor <- max(covid19_it_sum$nuovi_positivi) / max(covid19_it_sum$totale_casi) 
+
+# png("./images/Covid19_it_cumDualY.png", 500,500)
+# ggplot(covid19_it_sum, aes(x=data)) +
+#   geom_line( aes(y=totale_casi), size=1.5, color=tot_casiColor) +
+#   geom_line( aes(y=nuovi_positivi/scaleFactor), size=1.5, color="red") +  scale_y_continuous(
+#     # Features of the first axis
+#     name = "Total Covid-19 cases",
+#     # Add a second axis and specify its features
+#     sec.axis = sec_axis(~.*scaleFactor, name="nuovi positivi")
+#   ) +
+# 
+#   theme(
+#     axis.title.y = element_text(color = tot_casiColor, size=12),
+#     axis.title.y.right = element_text(color = "red", size=12),
+#     axis.ticks.y.right = element_line(color = "red")
+#     
+#   ) +
+#   ggtitle("Covid19 - Italy")
+# 
+# dev.off()
+
+
 png("./images/Covid19_it_newcases.png", 500,500)
 covid19_it_sum %>%
   tidyr::gather(key,value,variazione_totale_positivi, nuovi_positivi ) %>%
@@ -197,16 +223,6 @@ covid19_it_sum %>%
   scale_y_continuous(labels=fmt) +
   labs(y = "New incident confirmed Covid-19 cases", title = "Covid19 - Italy", 
        subtitle = "(Note: total units)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
-dev.off()
-
-png("./images/Covid19_it_TerapiaInt.png", 500,500)
-covid19_it_sum %>%
-  tidyr::gather(key,value,terapia_intensiva) %>%
-  ggplot(aes(x=data, y=value, colour=key)) +
-  geom_line(size= 1.3) + 
-  scale_y_continuous(labels=fmt) +
-  labs(y = "New figures on intensive care", title = "Covid19 - Italy", 
-       subtitle = "(red- intensive care cases)", caption = "giader >>> Data Source: https://github.com/pcm-dpc/COVID-19") 
 dev.off()
 
 png("./images/Covid19_it_PercTerapiaInt.png", 500,500)
@@ -333,7 +349,7 @@ library(echarts4r)
 library(earlyR)
 library(epitrix)
 library(projections)
-library(EpiEstim)
+##library(EpiEstim)
 
 
 
@@ -343,17 +359,18 @@ library(EpiEstim)
 # EpiEstim package
 plot_Ri <- function(estimate_R_obj) {
   p_I <- plot(estimate_R_obj, "incid", add_imported_cases = TRUE)  # plots the incidence
-  p_SI <- plot(estimate_R_obj, "SI")  # plots the serial interval distribution
+#  p_SI <- plot(estimate_R_obj, "SI")  # plots the serial interval distribution
   p_Ri <- plot(estimate_R_obj, "R")
-  return(gridExtra::grid.arrange(p_I, p_SI, p_Ri, ncol = 1))
+#  return(gridExtra::grid.arrange(p_I, p_SI, p_Ri, ncol = 1))
+  return(gridExtra::grid.arrange(p_I, p_Ri, ncol = 1))
 }
 
 
-IT_res_parametric_si <- EstimateR(covid19_it_sum$totale_casi, method = "ParametricSI", 
-                                  T.Start = c(5:51), T.End = c(5:51), 
-#                                  T.Start = covid19_it_sum$data[5:51], T.End = Sys.Date(), 
-                                  Mean.SI = 7.5, Std.SI = 3.4)
-#                                   config = make_config(list(mean_si = 7.5, std_si = 3.4)))
+# IT_res_parametric_si <- EstimateR(covid19_it_sum$totale_casi, method = "ParametricSI", 
+#                                   T.Start = c(5:51), T.End = c(5:51), 
+# #                                  T.Start = covid19_it_sum$data[5:51], T.End = Sys.Date(), 
+#                                   Mean.SI = 7.5, Std.SI = 3.4)
+# #                                   config = make_config(list(mean_si = 7.5, std_si = 3.4)))
 
 IT_res_parametric_si <- estimate_R(covid19_it_sum$totale_casi, method = "parametric_si", 
                                    config=make_config(list(
