@@ -37,3 +37,4 @@ weekly update
 ![Image Covid19_Abbruzzo_Perc](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_Abbruzzo_newcasesSmoothed.png)
 
 
+
