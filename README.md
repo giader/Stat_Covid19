@@ -21,9 +21,9 @@ Feel free to let me know your comments.
 weekly update
 ```
 ![Image Covid19_it_4Regions](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_4reg.png)
-
+```
 ![Image Covid19_it_EstimatedRt](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_EstimatedRt.png)
-
+```
 ![Image Covid19_it_new_cases](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_newcasesSmoothed.png)
 
 ![Image Covid19_it_Var_new_cases](https://github.com/giader/Stat_Covid19/blob/master/infographics/Covid19_it_varnewcasesSmoothed.png)
